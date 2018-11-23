@@ -12,10 +12,15 @@
         #flyjet {
             width: 40px;
             height: 24px;
-            transition: all 3s ease;
+            transition: all 3s cubic-bezier(0.5, 0.5, 1, 1);
         }
 
-        #flyjet.animated {
+        #flyjet.animatedBigger {
+            width: 600px;
+            height: 360px;
+        }
+
+        #flyjet.animatedNormal {
             width: 400px;
             height: 240px;
         }
@@ -28,14 +33,20 @@
 
     <script>
         flyjet.onclick = function (event) {
-            flyjet.classList.add('animated');
+            flyjet.classList.add('animatedBigger');
         };
+
         let done = [];
+        let backtoNormal = false;
         flyjet.addEventListener('transitionend', function (event) {
             done.push(event.propertyName);
             flyjet.classList.remove('animated');
             if (done.length === 2) {
                 console.log('done');
+                if (!backtoNormal) {
+                    backtoNormal = true;
+                    flyjet.classList.add('animatedNormal');
+                }
             }
         });
 
