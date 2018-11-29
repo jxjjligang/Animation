@@ -25,6 +25,11 @@
     </div>
     <br/>
 
+    <h3>Bounce timing (ease in first half timing, then ease out) animation</h3>
+    <div class="path" id="bceEIOPathDiv">
+        <div class="brick" id="bceEIODiv"></div>
+    </div>
+    <br/>
     <input type="button" value="Click to compare" onclick="run2Animation()" />
 
     <script>
@@ -44,6 +49,7 @@
                 ['rvsBceDiv', makeReverse(bounce)],
                 ['bceEIDiv', bounce],
                 ['bceEODiv', makeEaseout(bounce)],
+                ['bceEIODiv', makeEaseInOut(bounce)]
             ]
             );
 
@@ -61,11 +67,21 @@
         function makeEaseout(timingFunc) {
             return timeFraction => 1 - timingFunc(1 - timeFraction);
         }
+
         function bounce(timeFraction) {
             for (let a = 0, b = 1, result; 1; a += b, b /= 2) {
                 if (timeFraction >= (7 - 4 * a) / 11) {
                     return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2)
                 }
+            }
+        }
+
+        function makeEaseInOut(timing) {
+            return function (timeFraction) {
+                if (timeFraction < .5)
+                    return timing(2 * timeFraction) / 2;
+                else
+                    return (2 - timing(2 * (1 - timeFraction))) / 2;
             }
         }
     </script>
