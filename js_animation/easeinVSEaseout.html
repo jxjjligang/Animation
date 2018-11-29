@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="timingFunctionsCompae.css">
+    <script src="https://js.cx/libs/animate.js"></script>
+</head>
+
+<body>
+    <h3>Reverse bounce timing (easein) animation</h3>
+    <div class="path" id="rvsPathDiv">
+        <div class="brick" id="rvsBceDiv"></div>
+    </div>
+
+    <h3>Bounce timing (easeIn) animation</h3>
+    <div class="path" id="bceEIPathDiv">
+        <div class="brick" id="bceEIDiv"></div>
+    </div>
+    <br/>
+
+    <h3>Bounce timing (easeout) animation</h3>
+    <div class="path" id="bceEOPathDiv">
+        <div class="brick" id="bceEODiv"></div>
+    </div>
+    <br/>
+
+    <input type="button" value="Click to compare" onclick="run2Animation()" />
+
+    <script>
+        function run2Animation() {
+            let durationInSeconds = 6;
+            let drawFunction = function (divId) {
+                return function (progress) {
+                    let div = document.getElementById(divId);
+                    div.style.left = progress * 500 + 'px';
+                };
+            }
+            let template = {
+                duration: 1000 * durationInSeconds,
+            };
+
+            let divToFunc = new Map([
+                ['rvsBceDiv', makeReverse(bounce)],
+                ['bceEIDiv', bounce],
+                ['bceEODiv', makeEaseout(bounce)],
+            ]
+            );
+
+            divToFunc.forEach((value, key) => {
+                template['timing'] = value;
+                template['draw'] = drawFunction(key);
+                animate(template);
+            });
+        };
+
+        function makeReverse(timingFunc) {
+            return timeFraction => 1 - timingFunc(timeFraction);
+        }
+
+        function makeEaseout(timingFunc) {
+            return timeFraction => 1 - timingFunc(1 - timeFraction);
+        }
+        function bounce(timeFraction) {
+            for (let a = 0, b = 1, result; 1; a += b, b /= 2) {
+                if (timeFraction >= (7 - 4 * a) / 11) {
+                    return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2)
+                }
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
