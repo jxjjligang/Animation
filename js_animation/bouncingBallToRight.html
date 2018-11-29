@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <script src="https://en.js.cx/libs/animate.js"></script>
+    <link rel="stylesheet" href="bouncingBall.css">
+    <script src="animate.js"></script>
+</head>
+
+<body style="height:100%">
+    <div id="field">
+        <img src="https://en.js.cx/clipart/ball.svg" width="40" height="40" id="ball">
+    </div>
+
+    <script>
+        window.onload = function (event) {
+            let height = document.body.offsetHeight;
+            field.style.height = height + 'px';
+            field.style.display = 'block';
+
+            let ballRect = ball.getBoundingClientRect();
+            let distanceToLeft = document.body.offsetWidth - ballRect.width;
+            let drawFunc = drawFunction(ballRect.y, ballRect.x, height - ballRect.height, distanceToLeft);
+            runAnimation(drawFunc);
+        }
+
+        function runAnimation(drawFunc) {
+            let durationInSeconds = 6;
+            let template = {
+                duration: 1000 * durationInSeconds,
+                timing: makeEaseout(bounce),
+                draw: drawFunc
+            };
+            animate(template);
+        }
+
+        function drawFunction(ballTop, ballLeft, height, distanceToLeft) {
+            return progress => {
+                ball.style.top = (ballTop + progress * (height - ballTop)) + 'px';
+                ball.style.left = (ballLeft + progress * distanceToLeft) + 'px';
+            };
+        }
+
+        function makeEaseout(timingFunc) {
+            return timeFraction => 1 - timingFunc(1 - timeFraction);
+        }
+
+        function bounce(timeFraction) {
+            for (let a = 0, b = 1, result; 1; a += b, b /= 2) {
+                if (timeFraction >= (7 - 4 * a) / 11) {
+                    return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2)
+                }
+            }
+        }
+
+    </script>
+</body>
+
+</html>
