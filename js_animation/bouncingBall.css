@@ -1,0 +1,16 @@
+html, 
+body {
+    height: 95%;
+}
+
+#field {
+    height: 200px;
+    border-bottom: 3px black groove;
+    position: relative;
+    display: none;
+  }
+  
+  #ball {
+    position: absolute;
+    cursor: pointer;
+  }
